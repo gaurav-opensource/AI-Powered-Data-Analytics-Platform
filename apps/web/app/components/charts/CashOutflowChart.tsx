@@ -1,79 +1,69 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import api from "@/app/api/api"; // ← using central API
 import {
-  BarChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
+  CartesianGrid,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
 
-interface CashOutflowData {
-  range: string;
-  amount: number;
-}
+export default function CashOutflowChart() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export const CashOutflowChart: React.FC = () => {
-  const [data, setData] = useState<CashOutflowData[]>([]);
-
-  // ✅ Use sample data temporarily for design preview
   useEffect(() => {
-    const sampleData: CashOutflowData[] = [
-      { range: "0–7 days", amount: 45000 },
-      { range: "8–14 days", amount: 32000 },
-      { range: "15–30 days", amount: 28000 },
-      { range: "31–60 days", amount: 15000 },
-      { range: "61–90 days", amount: 12000 },
-      { range: "90+ days", amount: 8000 },
-    ];
-    setData(sampleData);
+    const loadOutflow = async () => {
+      try {
+        const response = await api.getCashOutflow(); // ← calling centralized api
+        setData(response.data || []);
+      } catch (err) {
+        console.error("Error loading cash outflow:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOutflow();
   }, []);
 
-  return (
-    <div className="bg-white rounded-xl shadow-md p-6 w-full">
-      {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-800">Cash Outflow Forecast</h2>
-        <p className="text-sm text-gray-500">
-          Expected payment obligations grouped by due date ranges.
-        </p>
-      </div>
+  if (loading) return <div className="text-center py-10">Loading chart...</div>;
 
-      {/* Chart */}
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
-          <YAxis
-            tickFormatter={(value) => `€${(value / 1000).toLocaleString()}k`}
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12, fill: "#6B7280" }}
-          />
-          <XAxis
-            dataKey="range"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12, fill: "#374151" }}
-          />
-          <Tooltip
-            formatter={(value: number) => `€${value.toLocaleString()}`}
-            contentStyle={{
-              backgroundColor: "#fff",
-              border: "1px solid #E5E7EB",
-              borderRadius: "0.5rem",
-              padding: "0.75rem",
-              boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
-            }}
-          />
-          <Bar dataKey="amount" fill="#312E81" radius={[8, 8, 0, 0]}>
-            {data.map((_, index) => (
-              <Cell key={`cell-${index}`} fill="#4338CA" />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold text-center mb-6">
+        Cash Outflow Forecast
+      </h1>
+
+      <div className="w-full h-80 bg-white rounded-xl shadow p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="colorOutflow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#00C49F" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#00C49F" stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
+
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+
+            <Area
+              type="monotone"
+              dataKey="cashOutflow"
+              stroke="#00C49F"
+              fillOpacity={1}
+              fill="url(#colorOutflow)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
-};
+}

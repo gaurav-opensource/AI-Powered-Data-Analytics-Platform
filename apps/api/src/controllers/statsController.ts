@@ -125,14 +125,81 @@ export const getCategorySpend = async (req: Request, res: Response): Promise<voi
  */
 export const getCashOutflow = async (req: Request, res: Response): Promise<void> => {
   try {
-    const cashOutflow: any[] = [];
+    // Fetch payments along with invoice summary
+    const payments = await prisma.payments.findMany({
+      include: {
+        invoice: {
+          include: {
+            summary: true
+          }
+        }
+      }
+    });
+
+    const outflowMap: Record<string, number> = {};
+
+    payments.forEach((p) => {
+      if (!p.due_date) return;
+
+      // Convert Date → YYYY-MM format
+      const month = p.due_date.toISOString().slice(0, 7);
+
+      // Get invoice_total from summary table
+      const invoiceTotal = Number(p.invoice?.summary?.[0]?.invoice_total ?? 0);
+
+      outflowMap[month] = (outflowMap[month] || 0) + invoiceTotal;
+    });
+
+    // Convert to array
+    const cashOutflow = Object.entries(outflowMap).map(([month, total]) => ({
+      month,
+      cashOutflow: total
+    }));
 
     res.status(200).json({
       status: "success",
       data: cashOutflow,
     });
+
   } catch (err) {
     console.error("Error fetching cash outflow:", err);
     res.status(500).json({ error: "Failed to fetch cash outflow" });
+  }
+};
+
+
+export const getDashboardStats = async (req: Request, res: Response) => {
+  try {
+    // Total Spend (sum of invoice_total)
+    const totalSpendAgg = await prisma.summary.aggregate({
+      _sum: { invoice_total: true }
+    });
+    const totalSpend = Number(totalSpendAgg._sum.invoice_total || 0);
+
+    // Total Invoices Count
+    const totalInvoices = await prisma.invoices.count();
+
+    // Documents Uploaded Count
+    const totalDocs = await prisma.documents.count();
+
+    // Average Invoice Value
+    const avgInvoiceAgg = await prisma.summary.aggregate({
+      _avg: { invoice_total: true }
+    });
+    const avgInvoice = Number(avgInvoiceAgg._avg.invoice_total || 0);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        totalSpend,
+        totalInvoices,
+        totalDocs,
+        avgInvoice
+      }
+    });
+
+  } catch (err) {
+    console.error("Dashboard Stats Error:", err);
+    res.status(500).json({ error: "Failed to fetch dashboard stats" });
   }
 };

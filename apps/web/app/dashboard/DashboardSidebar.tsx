@@ -1,90 +1,48 @@
-// Sidebar.tsx
-import React from "react";
-import {
-  HomeIcon,
-  DocumentIcon,
-  FolderIcon,
-  AcademicCapIcon,
-  UserIcon,
-  CogIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
+"use client";
 
-interface NavItem {
-  name: string;
-  icon: React.ReactNode;
-  active?: boolean;
-}
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export const Sidebar: React.FC = () => {
-  const generalNav: NavItem[] = [
-    { name: "Dashboard", icon: <HomeIcon className="w-5 h-5" />, active: true },
-    { name: "Invoice", icon: <DocumentIcon className="w-5 h-5" /> },
-    { name: "Other files", icon: <FolderIcon className="w-5 h-5" /> },
-    { name: "Departments", icon: <AcademicCapIcon className="w-5 h-5" /> },
-    { name: "Users", icon: <UserIcon className="w-5 h-5" /> },
-    { name: "Settings", icon: <CogIcon className="w-5 h-5" /> },
-  ];
+const menuItems = [
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "Invoice", path: "/invoice" },
+  { name: "Other Files", path: "/files" },
+  { name: "Departments", path: "/departments" },
+  { name: "Users", path: "/users" },
+  { name: "Chat with Data", path: "/chat" },
+  { name: "Settings", path: "/settings" },
+];
+
+export default function DashboardSidebar() {
+  const pathname = usePathname();
 
   return (
-    <div className="h-screen w-72 bg-white shadow-xl flex flex-col justify-between">
-      {/* Top Header */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {/* Placeholder Logo */}
-            <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-white font-bold text-lg">
-              L
-            </div>
-            <div>
-              <div className="text-lg font-bold text-gray-800">Buchhaltung</div>
-              <div className="text-xs text-gray-500">12 members</div>
-            </div>
-          </div>
-          <ChevronUpDownIcon className="w-5 h-5 text-gray-500" />
-        </div>
-      </div>
+    <div className="w-64 h-screen bg-[#0F172A] text-white border-r p-4 flex flex-col shadow-lg">
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 pt-6 pb-2 space-y-1">
-        <div className="text-xs font-semibold uppercase text-gray-500 px-3 pt-2 pb-2">
-          GENERAL
-        </div>
-        {generalNav.map((item) => (
-          <a
-            key={item.name}
-            href="#"
-            className={`flex items-center space-x-3 p-2 rounded-lg ${
-              item.active
-                ? "bg-indigo-100 text-indigo-800 font-semibold"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            <span
-              className={`flex-shrink-0 ${
-                item.active ? "text-indigo-600" : "text-gray-400"
-              }`}
+      <h1 className="text-lg font-bold mb-6 tracking-wide">
+        📘 AI-Powered Analytics
+      </h1>
+
+      <nav className="flex flex-col gap-2">
+        {menuItems.map((item) => {
+          const active = pathname === item.path;
+
+          return (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`p-3 rounded-lg text-sm font-medium transition-all duration-200
+                ${active 
+                  ? "bg-blue-600 text-white shadow-md" 
+                  : "text-gray-300 hover:bg-blue-800 hover:text-white"
+                }
+              `}
             >
-              {item.icon}
-            </span>
-            <span className="text-sm">{item.name}</span>
-          </a>
-        ))}
+              {item.name}
+            </Link>
+          );
+        })}
       </nav>
-
-      {/* Footer */}
-      <div className="p-3 border-t border-gray-200">
-        <a
-          href="#"
-          className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50"
-        >
-          {/* Placeholder Flowbit AI Logo */}
-          <div className="w-6 h-6 bg-purple-600 rounded-md flex items-center justify-center text-white font-bold text-xs">
-            A
-          </div>
-          <span className="text-sm font-semibold text-gray-800">Flowbit AI</span>
-        </a>
-      </div>
     </div>
   );
-};
+}

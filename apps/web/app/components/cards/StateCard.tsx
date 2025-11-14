@@ -1,19 +1,52 @@
-export const StatCard: React.FC<StatCardProps> = ({ title, value, change, isPositive, graph }) => {
-  const changeColor = isPositive ? "text-green-600" : "text-red-600";
-  const changeIcon = isPositive ? "↑" : "↓";
+"use client";
+import { useEffect, useState } from "react";
+
+export default function KPIStats({ type }: { type: string }) {
+
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/stats/dashboard")
+      .then(res => res.json())
+      .then(json => setData(json.data));
+  }, []);
+
+  if (!data) return null;
+
+  const cardData: any = {
+    totalSpend: {
+      label: "Total Spend (YTD)",
+      value: `€ ${data.totalSpend.toLocaleString()}`,
+      change: "+8.2%",
+      color: "text-green-600"
+    },
+    totalInvoices: {
+      label: "Total Invoices Processed",
+      value: data.totalInvoices,
+      change: "+8.2%",
+      color: "text-green-600"
+    },
+    documentsUploaded: {
+      label: "Documents Uploaded",
+      value: data.totalDocs,
+      change: "-1",
+      color: "text-red-600"
+    },
+    averageInvoice: {
+      label: "Average Invoice Value",
+      value: `€ ${data.avgInvoice.toLocaleString()}`,
+      change: "+8.2%",
+      color: "text-green-600"
+    }
+  };
+
+  const item = cardData[type];
 
   return (
-    <div className="flex w-full justify-between items-start bg-white p-5 rounded-xl shadow-md hover:shadow-lg">
-      <div className="flex flex-col space-y-3">
-        <div className="flex items-center text-sm font-medium text-gray-500 space-x-1">
-          <span>{title}</span>
-        </div>
-        <div className="text-3xl font-bold text-gray-800">{value}</div>
-        <div className={`text-sm font-medium ${changeColor}`}>
-          <span className="font-bold">{changeIcon}{change}</span> from last month
-        </div>
-      </div>
-      <div className="flex-shrink-0 mt-2">{graph}</div>
+    <div className="bg-white shadow rounded-xl p-5">
+      <p className="text-sm text-gray-500">{item.label}</p>
+      <p className="text-2xl font-bold">{item.value}</p>
+      <p className={`${item.color} text-sm mt-1`}>{item.change} from last month</p>
     </div>
   );
-};
+}

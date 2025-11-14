@@ -1,74 +1,59 @@
-// Dashboard.tsx
-import React from "react";
-import { Sidebar } from "./DashboardSidebar";
-import { StatCard } from "../components/cards/StateCard";
-import { InvoiceTrendChart } from "../components/charts/InvoiceTrendChart";
-import { VendorSpendChart } from "../components/charts/VendorSpendChart";
-import { CategorySpendChart } from "../components/charts/CategorySpendChart";
-import { CashOutflowChart } from "../components/charts/CashOutflowChart";
-import { InvoiceTable } from "../components/charts/InvoiceTable";
+"use client";
 
-export const Dashboard: React.FC = () => {
+import KPIStats from "../components/cards/StateCard";
+import InvoiceTrendChart from "../components/charts/InvoiceTrendChart";
+import CategorySpendChart from "../components/charts/CategorySpendChart";
+import CashOutflowChart from "../components/charts/CashOutflowChart";
+import InvoiceTable from "../components/charts/InvoiceTable";
+
+export default function DashboardPage() {
   return (
-    <div className="flex bg-gray-50 min-h-screen">
-      {/* --- LEFT SIDEBAR --- */}
-      <Sidebar />
+    <div className="ml-14 p-2 space-y-10 min-h-screen 
+      bg-gradient-to-br from-gray-100 via-gray-50 to-white
+    ">
 
-      {/* --- MAIN CONTENT AREA --- */}
-      <main className="flex-1 p-6 space-y-6">
-        {/* --- TOP METRICS ROW (4 Cards) --- */}
-        <div className="grid grid-cols-4 gap-6">
-          <StatCard
-            title="Total Spend (YTD)"
-            value="€ 12.679,25"
-            change="+8.2%"
-            isPositive={true}
-            graph={<div className="w-16 h-12 bg-green-200 rounded-lg" />}
-          />
-          <StatCard
-            title="Total Invoices Processed"
-            value="64"
-            change="+8.2%"
-            isPositive={true}
-            graph={<div className="w-16 h-12 bg-green-200 rounded-lg" />}
-          />
-          <StatCard
-            title="Documents Uploaded (This Month)"
-            value="17"
-            change="-8"
-            isPositive={false}
-            graph={<div className="w-16 h-12 bg-red-200 rounded-lg" />}
-          />
-          <StatCard
-            title="Average Invoice Value"
-            value="€ 2.455,00"
-            change="+8.2%"
-            isPositive={true}
-            graph={<div className="w-16 h-12 bg-green-200 rounded-lg" />}
-          />
-        </div>
+      {/* 🔥 TOP KPI SECTION */}
+      <h1 className="text-2xl font-bold text-gray-800 mb-4 tracking-wide">
+        Dashboard Overview
+      </h1>
 
-        {/* --- SECOND ROW: Detailed Charts --- */}
-        <div className="grid grid-cols-2 gap-6">
-          {/* Invoice Trend Line Chart */}
+      {/* 🔥 TOP 4 KPI CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <KPIStats type="totalSpend" />
+        <KPIStats type="totalInvoices" />
+        <KPIStats type="documentsUploaded" />
+        <KPIStats type="averageInvoice" />
+      </div>
+
+      {/* 🔥 INVOICE TREND */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Monthly Invoice Spend Trend</h2>
           <InvoiceTrendChart />
-
-          {/* Spend by Vendor Horizontal Bar Chart */}
-          <VendorSpendChart />
         </div>
+      </div>
 
-        {/* --- THIRD ROW: Bottom Charts/Table --- */}
-        <div className="grid grid-cols-3 gap-6">
-          {/* Spend by Category (Donut) */}
+      {/* 🔥 CATEGORY + CASH OUTFLOW */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Category Spend Overview</h2>
           <CategorySpendChart />
-
-          {/* Cash Outflow Forecast (Vertical Bar) */}
-          <CashOutflowChart />
-
-          {/* Invoices by Vendor Table */}
-          <InvoiceTable />
         </div>
-      </main>
+
+        <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Cash Outflow Forecast</h2>
+          <CashOutflowChart />
+        </div>
+
+      </div>
+
+      {/* 🔥 INVOICE TABLE */}
+      <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Invoices</h2>
+        <InvoiceTable />
+      </div>
+
     </div>
   );
-};
+}

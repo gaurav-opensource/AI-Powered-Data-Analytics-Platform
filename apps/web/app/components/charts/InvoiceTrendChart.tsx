@@ -1,18 +1,26 @@
 "use client";
 
-import  { useEffect, useState } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
+import api from "@/app/api/api";  // ⬅ using central API layer
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from "recharts";
 
 export default function InvoiceTrendsPage() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTrends = async () => {
+    const loadTrends = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/invoice-trends");
-        const json = await res.json();
-        setData(json.data || []);
+        const response = await api.getInvoiceTrends(); // ⬅ centralized API call
+        setData(response.data || []);
       } catch (err) {
         console.error("Error fetching trends", err);
       } finally {
@@ -20,14 +28,16 @@ export default function InvoiceTrendsPage() {
       }
     };
 
-    fetchTrends();
+    loadTrends();
   }, []);
 
   if (loading) return <div className="text-center p-6 text-lg">Loading chart...</div>;
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">Monthly Invoice Spend Trend</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        Monthly Invoice Spend Trend
+      </h1>
 
       <div className="w-full h-80 bg-white rounded-2xl shadow p-4">
         <ResponsiveContainer width="100%" height="100%">
@@ -36,7 +46,12 @@ export default function InvoiceTrendsPage() {
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="totalSpend" stroke="black" strokeWidth={2} />
+            <Line 
+              type="monotone" 
+              dataKey="totalSpend" 
+              stroke="black" 
+              strokeWidth={2} 
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

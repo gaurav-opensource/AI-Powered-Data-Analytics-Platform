@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import api from "@/app/api/api";  // ⬅ central API
 
 export default function InvoicesTablePage() {
-  const [invoices, setInvoices] = useState([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const loadInvoices = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/invoices");
-        const data = await res.json();
-        setInvoices(data);
+        const res = await api.getInvoices();  // ⬅ using api.ts
+        setInvoices(res.data || res);         // backend may send data:[] OR []
       } catch (err) {
         console.error("Error fetching invoices", err);
       } finally {
@@ -19,7 +19,7 @@ export default function InvoicesTablePage() {
       }
     };
 
-    fetchInvoices();
+    loadInvoices();
   }, []);
 
   if (loading) return <div className="text-center p-6 text-xl">Loading...</div>;
@@ -40,6 +40,7 @@ export default function InvoicesTablePage() {
               <th className="p-3">Total Amount</th>
             </tr>
           </thead>
+
           <tbody>
             {invoices.map((inv: any, index: number) => (
               <tr key={inv.id} className="border-b hover:bg-gray-50">
@@ -47,13 +48,16 @@ export default function InvoicesTablePage() {
                 <td className="p-3">{inv.invoice_id}</td>
                 <td className="p-3">{inv.vendor?.vendor_name || "N/A"}</td>
                 <td className="p-3">{inv.customer?.customer_name || "N/A"}</td>
-                <td className="p-3">{inv.invoice_date?.slice(0, 10)}</td>
+                <td className="p-3">
+                  {inv.invoice_date?.slice(0, 10) || "N/A"}
+                </td>
                 <td className="p-3 font-semibold">
-                  {inv.summary?.[0]?.invoice_total ?? "0"}
+                  {inv.summary?.[0]?.invoice_total?.toString() ?? "0"}
                 </td>
               </tr>
             ))}
           </tbody>
+
         </table>
       </div>
     </div>

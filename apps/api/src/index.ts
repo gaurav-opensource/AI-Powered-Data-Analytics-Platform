@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 import statsRoutes from "./routes/statsRoutes.ts";
 import invoiceRoutes from "./routes/invoiceRoutes.ts";
-// import chatRoutes from "./routes/chatRoutes.ts";
+import chatRoutes from "./routes/chatRoutes.ts";
 
 
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(express.json());
 // Routes
 app.use("/api", statsRoutes);
 app.use("/api", invoiceRoutes);
-// app.use("/api", chatRoutes);
+app.use("/api", chatRoutes);
 
 app.get("/test-db", async (req, res) => {
   try {
