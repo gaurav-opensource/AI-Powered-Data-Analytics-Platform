@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model vendors {
+  id                  Int        @id @default(autoincrement())
+  vendor_name         String?
+  vendor_party_number String?
+  vendor_address      String?
+  vendor_tax_id       String?
+  invoices            invoices[]
+}
+
+model customers {
+  id               Int        @id @default(autoincrement())
+  customer_name    String?
+  customer_address String?
+  invoices         invoices[]
+}
+
+model documents {
+  id           Int        @id @default(autoincrement())
+  document_id  String?
+  name         String?
+  file_path    String?
+  status       String?
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @default(now())
+  analytics_id String?
+  invoices     invoices[]
+}
+
+model invoices {
+  id            Int         @id @default(autoincrement())
+  invoice_id    String?
+  invoice_date  DateTime?
+  delivery_date DateTime?
+
+  document_id   Int?
+  vendor_id     Int?
+  customer_id   Int?
+
+  vendor        vendors?     @relation(fields: [vendor_id], references: [id])
+  customer      customers?   @relation(fields: [customer_id], references: [id])
+  document      documents?   @relation(fields: [document_id], references: [id])
+
+  lineItems     line_items[]
+  payments      payments[]
+  summary       summary[]
+}
+
+model line_items {
+  id             Int      @id @default(autoincrement())
+  invoice_id     Int?
+  sr_no          Int?
+  description    String?
+  quantity       Decimal?
+  unit_price     Decimal?
+  total_price    Decimal?
+  sachkonto      String?
+  bus_schluessel String?
+
+  invoice invoices? @relation(fields: [invoice_id], references: [id])
+}
+
+model summary {
+  id              Int      @id @default(autoincrement())
+  invoice_id      Int?
+  sub_total       Decimal?
+  total_tax       Decimal?
+  invoice_total   Decimal?
+  currency_symbol String?
+
+  invoice invoices? @relation(fields: [invoice_id], references: [id])
+}
+
+model payments {
+  id                  Int      @id @default(autoincrement())
+  invoice_id          Int?
+  due_date            DateTime?
+  bank_account_number String?
+  net_days            Int?
+  discount_percentage Decimal?
+
+  invoice invoices? @relation(fields: [invoice_id], references: [id])
+}
