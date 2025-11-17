@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/app/api/api";  // ⬅ using central API layer
+import api from "@/app/api/api";  
 import { 
   LineChart, 
   Line, 
@@ -19,7 +19,7 @@ export default function InvoiceTrendsPage() {
   useEffect(() => {
     const loadTrends = async () => {
       try {
-        const response = await api.getInvoiceTrends(); // ⬅ centralized API call
+        const response = await api.getInvoiceTrends(); // centralized API call
         setData(response.data || []);
       } catch (err) {
         console.error("Error fetching trends", err);

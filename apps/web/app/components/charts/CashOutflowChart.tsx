@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/app/api/api"; // ← using central API
+import api from "@/app/api/api"; 
 import {
   AreaChart,
   Area,
@@ -19,7 +19,7 @@ export default function CashOutflowChart() {
   useEffect(() => {
     const loadOutflow = async () => {
       try {
-        const response = await api.getCashOutflow(); // ← calling centralized api
+        const response = await api.getCashOutflow(); //  calling centralized api
         setData(response.data || []);
       } catch (err) {
         console.error("Error loading cash outflow:", err);

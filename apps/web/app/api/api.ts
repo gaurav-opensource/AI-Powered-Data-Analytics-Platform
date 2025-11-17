@@ -1,5 +1,3 @@
-// app/api/api.ts
-
 const BASE_URL = "http://localhost:5000/api";
 
 async function apiFetch(path: string, options: RequestInit = {}) {
@@ -20,29 +18,30 @@ async function apiFetch(path: string, options: RequestInit = {}) {
 }
 
 const api = {
-  // 📌 Dashboard KPIs
+  //  Dashboard KPIs
   getDashboardStats: () => apiFetch("/stats/dashboard"),
 
-  // 📌 Invoice Trend Chart
+  //  Invoice Trend Chart
   getInvoiceTrends: () => apiFetch("/invoice-trends"),
 
-  // 📌 Category Spend Chart
+  // Category Spend Chart
   getCategorySpend: () => apiFetch("/category-spend"),
 
-  // 📌 Cash Outflow Chart
+  // Cash Outflow Chart
   getCashOutflow: () => apiFetch("/cash-outflow"),
 
-  // 📌 All Invoices Table
+  // All Invoices Table
   getInvoices: () => apiFetch("/invoices"),
 
-  // 📌 Invoice by ID
+  // Invoice by ID
   getInvoiceById: (id: number) => apiFetch(`/invoices/${id}`),
 
-  // 📌 Chat Assistant (if any AI or chat route exists)
-  sendChatMessage: (message: string) =>
-    apiFetch("/chat", {
+  // Chat Assistant (if any AI or chat route exists)
+   // ⭐ Chat With Data
+  chatWithData: (query: string) =>
+    apiFetch("/chat-with-data", {
       method: "POST",
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ query }),
     }),
 };
 

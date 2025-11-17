@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import api from "@/app/api/api";
+
 import {
   PieChart,
   Pie,
@@ -17,7 +19,7 @@ interface QueryResult {
   [key: string]: string | number | boolean | null | undefined;
 }
 
-export default function Home() {
+export default function ChatWithDataPage() {
   const [userQuery, setUserQuery] = useState("");
   const [generatedSQL, setGeneratedSQL] = useState("");
   const [results, setResults] = useState<QueryResult[]>([]);
@@ -27,17 +29,12 @@ export default function Home() {
 
   const handleQuerySubmit = async () => {
     if (!userQuery.trim()) return;
+
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/chat-with-data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userQuery }),
-      });
-
-      const data = await res.json();
+      const data = await api.chatWithData(userQuery);
 
       setHasFirstRun(true);
 
@@ -48,19 +45,18 @@ export default function Home() {
         setResults(data.results ?? []);
       }
     } catch (err) {
-      if (err instanceof Error) setError(err.message);
-      else setError("Unknown error");
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
   };
 
+  // Identify numeric columns for charts
   const numericColumns = results.length
-    ? Object.keys(results[0]).filter(
-        (col) => !isNaN(Number(results[0][col]))
-      )
+    ? Object.keys(results[0]).filter((col) => !isNaN(Number(results[0][col])))
     : [];
 
+  // Prepare chart data
   let chartData: { name: string; value: number }[] = [];
   if (results.length && numericColumns.length) {
     const keyColumn = Object.keys(results[0])[0];
@@ -76,15 +72,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-gray-100 flex flex-col items-center px-20 py-10 space-y-10">
+
+      {/* Title */}
       <h1 className="text-3xl font-bold text-white">Chat With Data</h1>
 
-      {/* Chat Input Section */}
+      {/* Input Section */}
       <div className="w-full max-w-5xl flex gap-3">
         <input
           type="text"
           value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}
-          placeholder="Ask something like 'Total spend last 90 days'"
+          placeholder="Ask something like: 'Total spend last 90 days'"
           className="flex-1 bg-zinc-900 text-white border border-zinc-700 rounded-xl px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
@@ -99,13 +97,23 @@ export default function Home() {
       {/* Output Section */}
       {hasFirstRun && (
         <div className="w-full max-w-5xl space-y-6">
+
+          {/* Error */}
           {error && (
             <div className="text-red-400 font-medium bg-red-900/20 border border-red-700 p-3 rounded-xl">
               {error}
             </div>
           )}
 
-          {/* Results Table */}
+          {/* SQL Query Output */}
+          {generatedSQL && (
+            <div className="bg-zinc-900 border border-zinc-700 p-4 rounded-xl">
+              <h2 className="text-lg font-semibold mb-2">Generated SQL:</h2>
+              <pre className="text-sm text-gray-300 whitespace-pre-wrap">{generatedSQL}</pre>
+            </div>
+          )}
+
+          {/* Data Table */}
           {results.length > 0 && (
             <div>
               <h2 className="font-semibold text-lg mb-3">Results:</h2>
@@ -131,9 +139,7 @@ export default function Home() {
                       >
                         {Object.values(row).map((val, j) => (
                           <td key={j} className="border border-zinc-800 px-3 py-2">
-                            {val !== null && val !== undefined
-                              ? val.toString()
-                              : "—"}
+                            {val !== null && val !== undefined ? val.toString() : "—"}
                           </td>
                         ))}
                       </tr>
@@ -142,7 +148,7 @@ export default function Home() {
                 </table>
               </div>
 
-              {/* Chart */}
+              {/* Chart Section */}
               {chartData.length > 0 && (
                 <div className="h-80 mt-10">
                   <ResponsiveContainer width="100%" height="100%">
@@ -156,7 +162,10 @@ export default function Home() {
                           label
                         >
                           {chartData.map((_, index) => (
-                            <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                            <Cell
+                              key={index}
+                              fill={COLORS[index % COLORS.length]}
+                            />
                           ))}
                         </Pie>
                       </PieChart>

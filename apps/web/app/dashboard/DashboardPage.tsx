@@ -12,12 +12,12 @@ export default function DashboardPage() {
       bg-gradient-to-br from-gray-100 via-gray-50 to-white
     ">
 
-      {/* 🔥 TOP KPI SECTION */}
+      {/*  TOP KPI SECTION */}
       <h1 className="text-2xl font-bold text-gray-800 mb-4 tracking-wide">
         Dashboard Overview
       </h1>
 
-      {/* 🔥 TOP 4 KPI CARDS */}
+      {/*  TOP 4 KPI CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <KPIStats type="totalSpend" />
         <KPIStats type="totalInvoices" />
@@ -25,7 +25,7 @@ export default function DashboardPage() {
         <KPIStats type="averageInvoice" />
       </div>
 
-      {/* 🔥 INVOICE TREND */}
+      {/*  INVOICE TREND */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Monthly Invoice Spend Trend</h2>
@@ -33,7 +33,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 🔥 CATEGORY + CASH OUTFLOW */}
+      {/*  CATEGORY + CASH OUTFLOW */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* 🔥 INVOICE TABLE */}
+      {/* INVOICE TABLE */}
       <div className="bg-white shadow-lg border border-gray-100 rounded-xl p-6 hover:shadow-xl transition-all duration-200">
         <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Invoices</h2>
         <InvoiceTable />

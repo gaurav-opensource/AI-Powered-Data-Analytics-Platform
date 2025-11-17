@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/app/api/api";  // ⬅ using centralized API
+import api from "@/app/api/api";  // 
 import {
   PieChart,
   Pie,
@@ -28,7 +28,7 @@ export default function CategorySpendChart() {
   useEffect(() => {
     const loadCategorySpend = async () => {
       try {
-        const response = await api.getCategorySpend();  // ⬅ centralized API call
+        const response = await api.getCategorySpend();  //  centralized API call
         setData(response.data || []);
       } catch (err) {
         console.error("Error loading category spend:", err);

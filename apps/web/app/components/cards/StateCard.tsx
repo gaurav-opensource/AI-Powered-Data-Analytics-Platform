@@ -1,14 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
+import api from "@/app/api/api";
 
 export default function KPIStats({ type }: { type: string }) {
 
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/stats/dashboard")
-      .then(res => res.json())
-      .then(json => setData(json.data));
+    api.getDashboardStats()
+      .then((json) => setData(json.data))
+      .catch((err) => console.error("Error fetching stats:", err));
   }, []);
 
   if (!data) return null;

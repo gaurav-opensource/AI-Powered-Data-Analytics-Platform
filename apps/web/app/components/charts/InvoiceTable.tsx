@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/app/api/api";  // ⬅ central API
+import api from "@/app/api/api";  
 
 export default function InvoicesTablePage() {
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -10,7 +10,7 @@ export default function InvoicesTablePage() {
   useEffect(() => {
     const loadInvoices = async () => {
       try {
-        const res = await api.getInvoices();  // ⬅ using api.ts
+        const res = await api.getInvoices();  
         setInvoices(res.data || res);         // backend may send data:[] OR []
       } catch (err) {
         console.error("Error fetching invoices", err);
