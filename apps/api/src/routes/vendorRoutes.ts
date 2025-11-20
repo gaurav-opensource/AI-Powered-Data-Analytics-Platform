@@ -1,11 +1,9 @@
-// routes/invoiceRoutes.ts
 import express from 'express';
-import { getInvoices, getInvoiceById, createInvoice } from '../controllers/vendorController';
+import { getInvoices } from '../controllers/vendorController.ts';
 
 const router = express.Router();
 
-router.get('/', getInvoices);           // GET /api/invoices
-router.get('/:id', getInvoiceById);    // GET /api/invoices/:id
-router.post('/', createInvoice);       // POST /api/invoices
+router.get('/vendor', getInvoices);           
+   
 
 export default router;

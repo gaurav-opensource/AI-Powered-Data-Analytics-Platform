@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import fetch from "node-fetch";
 
+
+// using promot geneart query
 export const chatWithData = async (req: Request, res: Response) => {
   try {
     const { query } = req.body;

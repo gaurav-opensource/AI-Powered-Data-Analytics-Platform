@@ -6,11 +6,11 @@ import {
   getCategorySpend,
   getCashOutflow,
   getDashboardStats
-} from "../controllers/statsController.ts"; // ✅ include .ts extension
+} from "../controllers/statsController.ts"; 
 
 const router = express.Router();
 
-// ✅ Route definitions
+//  Route define
 router.get("/stats", getStats);
 router.get("/invoice-trends", getInvoiceTrends);
 router.get("/vendors/top10", getTopVendors);

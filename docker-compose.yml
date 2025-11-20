@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: api_service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+    env_file:
+      - ./apps/api/.env
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: web_service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api

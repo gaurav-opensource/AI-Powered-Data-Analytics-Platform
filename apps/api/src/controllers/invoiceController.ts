@@ -1,10 +1,9 @@
-// src/controllers/invoiceController.ts
 import type { Request, Response } from "express";
 import prisma from "../utils/prismaClient.ts";
 
-/**
- * Get all invoices
- */
+
+// Get all invoices
+
 export const getInvoices = async (req: Request, res: Response) => {
   try {
     const invoices = await prisma.invoices.findMany({
@@ -23,9 +22,8 @@ export const getInvoices = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * Get invoice by ID (UUID string)
- */export const getInvoiceById = async (req: Request, res: Response) => {
+// Get invoice by ID 
+export const getInvoiceById = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id); // ✅ convert to number
 

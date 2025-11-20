@@ -32,6 +32,9 @@ const api = {
 
   // All Invoices Table
   getInvoices: () => apiFetch("/invoices"),
+  //Vendor Chart
+  getVendorInvoices: () => apiFetch("/vendor"),
+
 
   // Invoice by ID
   getInvoiceById: (id: number) => apiFetch(`/invoices/${id}`),

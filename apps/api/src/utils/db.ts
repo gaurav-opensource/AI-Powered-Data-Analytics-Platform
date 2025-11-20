@@ -1,4 +1,3 @@
-// db.ts
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import dotenv from "dotenv";
 

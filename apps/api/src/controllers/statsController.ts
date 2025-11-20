@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import prisma from "../utils/prismaClient.ts";
 
 /**
- * 📌 1. Get general statistics
+ *  1. Get general statistics
  * - Total invoices
  * - Total spend (sum of invoice_total from summary)
  */
@@ -26,7 +26,7 @@ export const getStats = async (req: Request, res: Response): Promise<void> => {
 };
 
 /**
- * 📌 2. Get monthly invoice spending trend
+ * 2. Get monthly invoice spending trend
  * - Groups by YYYY-MM
  */
 export const getInvoiceTrends = async (req: Request, res: Response) => {
@@ -61,8 +61,9 @@ export const getInvoiceTrends = async (req: Request, res: Response) => {
 };
 
 
+
 /**
- * 📌 3. Top Vendors (Basic version)
+ *  3. Top 10 Vendors (Basic version)
  * - Later can include spending aggregation
  */
 export const getTopVendors = async (req: Request, res: Response): Promise<void> => {
@@ -79,8 +80,9 @@ export const getTopVendors = async (req: Request, res: Response): Promise<void> 
   }
 };
 
+
 /**
- * 📌 4. Category Spend (placeholder for future extension)
+ *  4. Category Spend (placeholder for future extension)
  */
 export const getCategorySpend = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -120,8 +122,9 @@ export const getCategorySpend = async (req: Request, res: Response): Promise<voi
   }
 };
 
+
 /**
- * 📌 5. Cash Outflow (placeholder)
+ * 5. Cash Outflow (placeholder)
  */
 export const getCashOutflow = async (req: Request, res: Response): Promise<void> => {
   try {
