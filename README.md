@@ -52,28 +52,21 @@ Includes Docker for:
 * Vanna AI
 * PostgreSQL
 
----
-# 🎥 3. Demo Video
+
+# 🎥 Demo Video
 
 Below is the recorded walkthrough of the full platform including:
 
 - Dashboard UI
-- Analytics charts
-- Vendor & Category insights
+- Analytics & charts
 - Chat With Data (AI)
-- Automatic SQL generation
-- Query execution results
+- SQL generation
+- Live query results
 
----
-
-### ▶️ Watch Demo Video
+▶️ **Demo Video:**
 
 https://github.com/gaurav-opensource/AI-Powered-Data-Analytics-Platform/raw/main/screenshots/demo.mp4
 
-
-
-
----
 
 # 🗂️ **4. Monorepo Structure**
 
