@@ -53,19 +53,12 @@ Includes Docker for:
 * PostgreSQL
 
 
-# 🎥 Demo Video
+# 🎥 Demo Video (YouTube)
 
-Below is the recorded walkthrough of the full platform including:
+Below is the recorded walkthrough of the complete AI-Powered Analytics Platform:
 
-- Dashboard UI
-- Analytics & charts
-- Chat With Data (AI)
-- SQL generation
-- Live query results
+[![Demo Video](https://img.youtube.com/vi/6l7gnW9o1ig/maxresdefault.jpg)](https://youtu.be/6l7gnW9o1ig)
 
-▶️ **Demo Video:**
-
-https://github.com/gaurav-opensource/AI-Powered-Data-Analytics-Platform/raw/main/screenshots/demo.mp4
 
 
 # 🗂️ **4. Monorepo Structure**
