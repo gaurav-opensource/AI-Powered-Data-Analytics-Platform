@@ -53,44 +53,25 @@ Includes Docker for:
 * PostgreSQL
 
 ---
+# 🎥 3. Demo Video
 
-# 🎥 **3. Demo Video**
+Below is the recorded walkthrough of the full platform including:
 
-*(Replace the placeholder with your actual video)*
-
-### 👉 **Option A — Upload Video to Repo**
-
-Place your video inside:
-
-```
-/videos/demo.mp4
-```
-
-Then embed like:
-
-```md
-https://github.com/<your-username>/<repo>/raw/main/videos/demo.mp4
-```
-
-GitHub automatically shows the video player.
+- Dashboard UI
+- Analytics charts
+- Vendor & Category insights
+- Chat With Data (AI)
+- Automatic SQL generation
+- Query execution results
 
 ---
 
-### 👉 **Option B — Upload Video to YouTube or Drive**
+### ▶️ Watch Demo Video
 
-Embed like:
+https://github.com/gaurav-opensource/AI-Powered-Data-Analytics-Platform/raw/main/screenshots/demo.mp4
 
-```md
-[🎥 Watch Demo Video](https://github.com/gaurav-opensource/AI-Powered-Data-Analytics-Platform/screenshots/demo.mp4)
-```
 
----
 
-### **Demo Video Placeholder (replace this):**
-
-```md
-[🎥 Demo Video](./videos/demo.mp4)
-```
 
 ---
 
