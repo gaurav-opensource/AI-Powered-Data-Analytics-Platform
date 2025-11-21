@@ -40,7 +40,7 @@ const api = {
   getInvoiceById: (id: number) => apiFetch(`/invoices/${id}`),
 
   // Chat Assistant (if any AI or chat route exists)
-   // ⭐ Chat With Data
+   //  Chat With Data
   chatWithData: (query: string) =>
     apiFetch("/chat-with-data", {
       method: "POST",

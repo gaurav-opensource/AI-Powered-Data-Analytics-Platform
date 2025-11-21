@@ -2,13 +2,13 @@ import type { Request, Response } from "express";
 import prisma from "../utils/prismaClient.ts";
 
 
-
-// GET ALL VENDORS WITH INVOICES
+//Get all vendors with invoices
 export const getInvoices = async (req: Request, res: Response) => {
   try {
+    //Get all vendors
     const vendors = await prisma.vendors.findMany({
       include: {
-        invoices: true, // fetch all invoices related to vendor
+        invoices: true, 
       },
     });
 

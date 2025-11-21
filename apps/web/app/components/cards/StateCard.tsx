@@ -1,54 +1,50 @@
-"use client";
+const BASE_URL = "http://localhost:5000/api";
 
-import { useEffect, useState } from "react";
-import api from "@/app/api/api";
-
-export default function KPIStats({ type }: { type: string }) {
-
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    api.getDashboardStats()
-      .then((json) => setData(json.data))
-      .catch((err) => console.error("Error fetching stats:", err));
-  }, []);
-
-  if (!data) return null;
-
-  const cardData: any = {
-    totalSpend: {
-      label: "Total Spend (YTD)",
-      value: `€ ${data.totalSpend.toLocaleString()}`,
-      change: "+8.2%",
-      color: "text-green-600"
+async function apiFetch(path: string, options: RequestInit = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
     },
-    totalInvoices: {
-      label: "Total Invoices Processed",
-      value: data.totalInvoices,
-      change: "+8.2%",
-      color: "text-green-600"
-    },
-    documentsUploaded: {
-      label: "Documents Uploaded",
-      value: data.totalDocs,
-      change: "-1",
-      color: "text-red-600"
-    },
-    averageInvoice: {
-      label: "Average Invoice Value",
-      value: `€ ${data.avgInvoice.toLocaleString()}`,
-      change: "+8.2%",
-      color: "text-green-600"
-    }
-  };
+    cache: "no-store",
+  });
 
-  const item = cardData[type];
+  if (!res.ok) {
+    throw new Error(`API Error: ${res.statusText}`);
+  }
 
-  return (
-    <div className="bg-white shadow rounded-xl p-5">
-      <p className="text-sm text-gray-500">{item.label}</p>
-      <p className="text-2xl font-bold">{item.value}</p>
-      <p className={`${item.color} text-sm mt-1`}>{item.change} from last month</p>
-    </div>
-  );
+  return res.json();
 }
+
+const api = {
+  // Dashboard KPIs
+  getDashboardStats: () => apiFetch("/stats/dashboard"),
+
+  // Invoice trend chart
+  getInvoiceTrends: () => apiFetch("/invoice-trends"),
+
+  // Category spend chart
+  getCategorySpend: () => apiFetch("/category-spend"),
+
+  // Cash outflow chart
+  getCashOutflow: () => apiFetch("/cash-outflow"),
+
+  // All invoices table
+  getInvoices: () => apiFetch("/invoices"),
+
+  // Vendor chart
+  getVendorInvoices: () => apiFetch("/vendor"),
+
+  // Invoice by ID
+  getInvoiceById: (id: number) => apiFetch(`/invoices/${id}`),
+
+  // Chat With Data
+  chatWithData: (query: string) =>
+    apiFetch("/chat-with-data", {
+      method: "POST",
+      body: JSON.stringify({ query }),
+    }),
+};
+
+export default api;
